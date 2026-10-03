@@ -85,3 +85,20 @@ with warnings.catch_warnings():
 
 Rendering is **deterministic per font environment**: the same deck and the same
 installed fonts always produce the same PDF bytes.
+
+## On main, unreleased
+
+These export changes are merged on `main` after 0.5.1 and are not yet on PyPI:
+
+- **Run-level `spc`, `baseline` and `cap`** are parsed, inherited through
+  `txStyles` / `lstStyle`, exposed in the run dict (`char_spacing_pt` /
+  `baseline` / `cap`) and rendered. `cap="small"` is approximated as all caps
+  with a one-time `small-caps` warning.
+- **Line ends** `a:headEnd` / `a:tailEnd` (triangle, stealth, diamond, oval,
+  arrow; three sizes) are drawn on open outlines; unsupported kinds warn with
+  `line-end-degraded`.
+- **`a:custGeom`** is no longer silently drawn as a rectangle: it is
+  approximated by its bounding box (connectors as a straight line) with a
+  `custom-geometry-approximated` warning.
+
+Decks that use none of these render byte-identical PDFs.

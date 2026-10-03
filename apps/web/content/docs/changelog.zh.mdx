@@ -8,12 +8,42 @@ description: 按版本记录 RAGSpine 面向用户的重要变更——以及 Sp
 [ADR](/docs/decisions)。符号级细节请对 tag 对应的源码运行 `make docs`。
 
 <Callout type="info">
-  文档跟随当前 `main` 树，其包元数据为 `0.11.0`。这并不
-  意味着 PyPI 已发布 0.11.0。请通过 `ragspine version` 和你的 lockfile 确认
-  已安装发行版的行为。
+  PyPI 上的最新发布版是 **rag-spine 0.17.2**。`main` 树的包元数据为 `0.17.3`，尚未发布。
+  0.12.0–0.17.2 的条目尚未整理到本页，请参阅仓库的
+  [CHANGELOG](https://github.com/VoldemortGin/ragspine/blob/main/CHANGELOG.md)。请通过
+  `ragspine version` 和你的 lockfile 确认已安装发行版的行为。
 </Callout>
 
-## 0.11.0（当前源码快照）
+## `main` 上未发布（0.17.3）
+
+**统一配置模块、一条命令跑完整个文件夹，以及计划中的发行名更改。** 截至 2026-10-02 已合入
+`main`，尚未发布到 PyPI。
+
+### 变更
+
+- **计划将 PyPI 发行名 `rag-spine` 改为 `ragspine`。** 从 0.17.3 起发行包将以 `ragspine`
+  发布，`rag-spine` 保留为过渡包，依赖同版本的 `ragspine`。导入名（`import ragspine`）和
+  `ragspine` CLI 不变。在 0.17.3 发布之前，请继续使用 `pip install rag-spine` 安装。
+- **叙述性引用后缀按文档合并**（`RAGSPINE_CITATION_MERGE=on|off`，默认 `on`）：来源后缀按文档
+  分组定位符，页码合并为区间。仅影响展示；`answer_plain` 和 `sources` 不变，`off` 恢复旧输出。
+
+### 新增
+
+- **统一配置。** 配置集中在 `ragspine.common.evidence.configs`：由 pydantic-settings 读取项目
+  `.env`，变量使用 `APP_` 前缀（嵌套字段用 `__`）；`APP_LLM_API_KEY` / `APP_LLM_BASE_URL` /
+  `APP_LLM_MODEL` 未设置时回退到 `OPENAI_API_KEY` / `OPENAI_BASE_URL` / `OPENAI_MODEL`。真实环境
+  变量优先于 `.env`，因此在 shell 中导出的 `OPENAI_*` 会覆盖只写在 `.env` 里的 `APP_LLM_*`。
+- **`enterprise-pdf-rag run-folder`。** 把一个文件夹下（递归）的每个 PDF 依次走完摄取、资格校验、
+  索引和发布，然后可选地在进程内回答一组问题。运行有预算控制且可续跑。文件夹、问题集和报告目录
+  默认取 `NB_PDF_DIR`、`NB_QUESTIONS_PATH` 和 `NB_REPORT_DIR`；显式参数优先。
+- **示例 notebook** `notebooks/run_folder.ipynb`，驱动同一条流水线（提交时不含输出和密钥）。
+
+### 修复
+
+- 数字守卫不再因裸 `page=` / `slide=` 定位符而拆分页码列表；页码列表也不再吞掉其后带单位的数字
+  （`%`、小数部分，或 `亿` / `million` 等量级词）。
+
+## 0.11.0
 
 **自然语言工作流脚手架与安全的网站预览契约。** 这些工作已存在
 于 `main`；发布状态刻意不从源码元数据推断。
@@ -267,28 +297,28 @@ Vespa · Jina · Cohere）做基准。与 0.7.0 一样，每项新增都**可选
 
 ## Spine 家族
 
-RAGSpine 是共享薄核 `corespine` 的小家族中的一个包。当前
-兄弟包版本：
+RAGSpine 是共享薄核 `corespine` 的小家族中的一个包。以下为 PyPI 上的最新版本
+（2026-10-02 核对），并注明已合入 `main` 但尚未发布的工作：
 
 <Cards>
   <Card
-    title="corespine 0.1.0"
+    title="corespine 0.5.1"
     description="薄共享核：LLMProvider 接缝 + RateLimitedProvider、六条 Protocol 接缝、统一错误类型和 mypy 门。仅含领域中立原语；运行时依赖为空。"
   ></Card>
   <Card
-    title="spineagent 0.0.3"
+    title="spineagent 0.3.1"
     description="通用多 agent 协作框架（agent / tool / 编排 + MCP / A2A 接缝），离线优先，构建于 corespine 之上。以双重类型门加固：mypy --strict + beartype。"
   ></Card>
   <Card
-    title="pdfspine 0.3.0"
-    description="Apache-2.0、纯 Rust 重新实现的 PyMuPDF（fitz），带 PyO3 绑定——PP-OCRv5 OCR 编译进 wheel 一并发布，现在还能从 Markdown 和图片生成 PDF。RAGSpine 通过它触达家族 OCR（[pdf] extra）。"
+    title="pdfspine 0.11.2"
+    description="Apache-2.0、纯 Rust 重新实现的 PyMuPDF（fitz），带 PyO3 绑定——PP-OCRv5 OCR 编译进 wheel 一并发布，现在还能从 Markdown 和图片生成 PDF。RAGSpine 通过它触达家族 OCR（[pdf] extra）。main 上未发布：0.11.3 修复无 ToUnicode 的 Identity-H / Identity-V 字体的 CJK 文本提取；模型未给出阅读顺序时，ONNX 版面改用递归 XY-cut 排序；pdf-typeset 新增虚线与带间距的段落分隔线。"
   ></Card>
   <Card
-    title="docspine 0.2.0"
-    description="Apache-2.0、纯 Rust 的 DOCX，一等公民的表格模型（gridSpan / vMerge / 嵌套）。现在能忠实导出 .docx → PDF（流式分页、按节几何、表格保真）。经 [doc] extra 支撑 RAGSpine 的 .docx Extractor。"
+    title="docspine 0.5.1"
+    description="Apache-2.0、纯 Rust 的 DOCX，一等公民的表格模型（gridSpan / vMerge / 嵌套）。现在能忠实导出 .docx → PDF（流式分页、按节几何、表格保真）。经 [doc] extra 支撑 RAGSpine 的 .docx Extractor。main 上未发布：依赖对齐 pdfspine 0.11.2；段落边框与底纹改用引擎原生绘制，跨页时每页都画；上下标采用真正的基线偏移，并支持 w:spacing 与 w:position；zip 限额（ZipLimits）与 64 层嵌套守卫；OCR panic 隔离；CI Python 矩阵现已真正运行。"
   ></Card>
   <Card
-    title="pptspine 0.2.0"
-    description="Apache-2.0、纯 Rust 的 PowerPoint / OOXML，合并处理更完善。现在能忠实导出 .pptx → PDF（每张幻灯片一页，占位符/主题继承）。经 [ppt] extra 支撑 RAGSpine 的可选 .pptx Extractor。"
+    title="pptspine 0.5.1"
+    description="Apache-2.0、纯 Rust 的 PowerPoint / OOXML，合并处理更完善。现在能忠实导出 .pptx → PDF（每张幻灯片一页，占位符/主题继承）。经 [ppt] extra 支撑 RAGSpine 的可选 .pptx Extractor。main 上未发布：依赖对齐 pdfspine 0.11.2；字符间距（spc）、baseline 与 cap；连接线线端（headEnd / tailEnd）；custGeom 近似绘制并告警；zip 限额；OCR panic 隔离；修复 CI wheels job。"
   ></Card>
 </Cards>

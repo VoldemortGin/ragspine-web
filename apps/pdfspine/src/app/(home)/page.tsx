@@ -135,9 +135,9 @@ export default function HomePage() {
               Alpha / pre-1.0 — but the core is feature-complete.
             </h2>
             <p className="max-w-2xl text-sm leading-relaxed text-fd-muted-foreground">
-              Release 0.8.0 implements 90.2% (694 of 769) of the PyMuPDF 1.24 public API. Install
+              Release 0.11.2 implements 91.4% (703 of 769) of the PyMuPDF 1.24 public API. Install
               the published package with{' '}
-              <span className="font-mono text-fd-foreground">pip install pdfspine==0.8.0</span>.
+              <span className="font-mono text-fd-foreground">pip install pdfspine==0.11.2</span>.
             </p>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">

@@ -46,6 +46,21 @@ text-extractable (a `ToUnicode` map is always written) and deterministic per
 font environment.
 </Callout>
 
+## Release status
+
+The latest release on PyPI is [pptspine 0.5.1](https://pypi.org/project/pptspine/0.5.1/).
+Merged on `main` but not yet released:
+
+- **Dependencies** aligned to pdfspine v0.11.2 (`pdf-typeset` / `pdf-fonts`) and
+  ocrspine `041958a`.
+- **PDF export**: run-level `spc` / `baseline` / `cap`, connector line ends
+  (`headEnd` / `tailEnd`), and `custGeom` approximated with a warning — see
+  [PDF export](/docs/pptspine/pdf-export#on-main-unreleased).
+- **Hardening**: zip reads are bounded by `ZipLimits` (violations raise
+  `PptZipError`), group / `mc:AlternateContent` nesting deeper than 64 is
+  skipped, and `ppt-ocr` panics surface as `PptOcrError`.
+- **CI**: the wheels job's OCR smoke test, failing since 2026-07, is fixed.
+
 ## The Spine family
 
 pptspine is one of three document-processing packages that share this

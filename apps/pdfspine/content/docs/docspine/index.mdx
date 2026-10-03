@@ -45,6 +45,23 @@ deterministic layout engine — not an HTML/CSS or Story engine. Output is
 text-extractable and deterministic per font environment.
 </Callout>
 
+## Release status
+
+The latest release on PyPI is [docspine 0.5.1](https://pypi.org/project/docspine/0.5.1/).
+Merged on `main` but not yet released:
+
+- **Dependencies** aligned to pdfspine v0.11.2 (`pdf-typeset` / `pdf-fonts`) and
+  ocrspine `041958a`.
+- **PDF export**: native paragraph borders and shading (drawn on every page a
+  paragraph spans), superscript / subscript with a real baseline shift, and
+  run-level `w:spacing` / `w:position` — see
+  [PDF export](/docs/docspine/pdf-export#on-main-unreleased).
+- **Hardening**: `.docx` zip reads are bounded by `ZipLimits` (entry count,
+  per-entry and total size, compression ratio, name length; violations raise
+  `DocZipError`), nesting deeper than 64 levels is skipped instead of
+  overflowing the stack, and `doc-ocr` panics surface as `DocOcrError`.
+- **CI**: the Python test matrix and SSIM gate now actually run in CI.
+
 ## The Spine family
 
 docspine is one of three document-processing packages that share this

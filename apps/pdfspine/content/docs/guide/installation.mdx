@@ -10,7 +10,7 @@ output on your own documents before relying on it in production.
 
 ## Requirements
 
-- **Python ≥ 3.12** for the published 0.8.0 package. Use a wheel matching your
+- **Python ≥ 3.12** for the published 0.11.2 package. Use a wheel matching your
   interpreter and platform; the earlier 3.11 installation floor no longer applies.
 - **Rust** (pinned by `rust-toolchain.toml`) and **maturin ≥ 1.12** — only needed
   to build from source.
@@ -22,7 +22,7 @@ output on your own documents before relying on it in production.
 pdfspine is **on PyPI**:
 
 ```bash
-pip install "pdfspine==0.8.0"
+pip install "pdfspine==0.11.2"
 ```
 
 This provides the `pdfspine` (native) package from one wheel, plus the opt-in
@@ -35,7 +35,7 @@ OCR works out of the box: the PP-OCRv5 weights ship in the shared
 ## Optional ONNX layout and tables
 
 ```bash
-pip install "pdfspine[onnx]==0.8.0"
+pip install "pdfspine[onnx]==0.11.2"
 ```
 
 This installs the runtime dependencies, not layout/table weights. Supply the weights
@@ -50,7 +50,7 @@ Clone the repository and check out the released source before building:
 ```bash
 git clone https://github.com/VoldemortGin/pdfspine.git
 cd pdfspine
-git checkout f1f6ab4208876b0ba867edd76cc4e5da7ad8add2
+git checkout 78a64d6e252ab739fcbad66c0d7f5328a080d667
 
 # Create an isolated environment.
 uv venv --python 3.12 .venv

@@ -8,12 +8,47 @@ description: リリースごとの RAGSpine の注目すべきユーザー向け
 [ADR](/ja/docs/decisions) を辿ってください。シンボルレベルの詳細については、タグ付けされたソースに対して `make docs` を実行してください。
 
 <Callout type="info">
-  このドキュメントは現在の `main` ツリーに追随しており、そのパッケージメタデータは `0.11.0` です。これは
-  PyPI に 0.11.0 が公開されているという主張ではありません。インストール済みディストリビューションの
-  挙動については `ragspine version` とロックファイルを確認してください。
+  PyPI の最新リリースは **rag-spine 0.17.2** です。`main` ツリーのパッケージメタデータは `0.17.3`
+  で、まだ公開されていません。0.12.0–0.17.2 の項目はまだこのページに転記されていません。リポジトリの
+  [CHANGELOG](https://github.com/VoldemortGin/ragspine/blob/main/CHANGELOG.md) を参照してください。
+  インストール済みディストリビューションの挙動については `ragspine version` とロックファイルを確認してください。
 </Callout>
 
-## 0.11.0（現在のソーススナップショット）
+## `main` 上の未リリース分（0.17.3）
+
+**単一の設定モジュール、フォルダー単位のワンコマンドパイプライン、予定されているディストリビューション名の変更。**
+2026-10-02 時点で `main` にマージ済みで、PyPI にはまだ公開されていません。
+
+### 変更
+
+- **PyPI ディストリビューション名を `rag-spine` から `ragspine` へ変更予定。** 0.17.3 以降は
+  `ragspine` として公開され、`rag-spine` は同じバージョンの `ragspine` に依存する移行用パッケージとして
+  残ります。インポート名（`import ragspine`）と `ragspine` CLI は変わりません。0.17.3 が公開されるまでは
+  引き続き `pip install rag-spine` でインストールしてください。
+- **叙述的な引用サフィックスを文書ごとに統合**（`RAGSPINE_CITATION_MERGE=on|off`、既定 `on`）：
+  出典サフィックスはロケーターを文書ごとにまとめ、ページ番号を範囲に畳みます。表示のみの変更で、
+  `answer_plain` と `sources` は変わらず、`off` で従来の出力に戻ります。
+
+### 追加
+
+- **統一された設定。** 設定は `ragspine.common.evidence.configs` に集約されます。pydantic-settings が
+  プロジェクトの `.env` を読み、変数は `APP_` プレフィックス（ネストしたフィールドは `__`）を使い、
+  `APP_LLM_API_KEY` / `APP_LLM_BASE_URL` / `APP_LLM_MODEL` が未設定のときは `OPENAI_API_KEY` /
+  `OPENAI_BASE_URL` / `OPENAI_MODEL` にフォールバックします。実際の環境変数は `.env` より優先されるため、
+  シェルで export した `OPENAI_*` は `.env` にだけ書かれた `APP_LLM_*` を上書きします。
+- **`enterprise-pdf-rag run-folder`。** フォルダー配下（再帰）のすべての PDF を取り込み、資格検証、
+  インデックス作成、公開まで通し、その後オプションで質問セットにプロセス内で回答します。実行は予算管理され、
+  再開可能です。フォルダー、質問セット、レポートディレクトリの既定値は `NB_PDF_DIR`、
+  `NB_QUESTIONS_PATH`、`NB_REPORT_DIR` で、明示的な引数が優先されます。
+- 同じパイプラインを動かす**サンプル notebook** `notebooks/run_folder.ipynb`（出力とシークレットなしで
+  コミット）。
+
+### 修正
+
+- 数値ガードは、裸の `page=` / `slide=` ロケーターでページリストを分割しなくなりました。また、ページリストが
+  直後の単位付きの数値（`%`、小数部、`亿` / `million` などの桁の語）を飲み込まなくなりました。
+
+## 0.11.0
 
 **自然言語によるワークフローのひな形生成と、安全なウェブサイトプレビュー契約。** この作業は
 `main` に存在します。公開ステータスは意図的にソースメタデータから推測していません。
@@ -270,28 +305,28 @@ RESTRICTED の 2 出口分離と出典追跡 conformance パックを継承し�
 
 ## Spine ファミリー
 
-RAGSpine は、薄い `corespine` コアを共有する小さなファミリーの 1 パッケージです。兄弟パッケージの
-現在のリリース：
+RAGSpine は、薄い `corespine` コアを共有する小さなファミリーの 1 パッケージです。PyPI 上の最新リリース
+（2026-10-02 確認）と、`main` にマージ済みで未リリースの作業：
 
 <Cards>
   <Card
-    title="corespine 0.1.0"
+    title="corespine 0.5.1"
     description="薄い共有コア：LLMProvider シーム + RateLimitedProvider、6 つの Protocol シーム、統一エラー型、mypy ゲート。ドメイン中立なプリミティブのみで、ランタイム依存は空です。"
   ></Card>
   <Card
-    title="spineagent 0.0.3"
+    title="spineagent 0.3.1"
     description="汎用マルチエージェント協調フレームワーク（agent / tool / オーケストレーション + MCP / A2A シーム）。オフラインファーストで corespine 上に構築されています。mypy --strict + beartype の二重型ゲートで強化されています。"
   ></Card>
   <Card
-    title="pdfspine 0.3.0"
-    description="PyMuPDF（fitz）の Apache-2.0・純 Rust 再実装（PyO3 バインディング付き）— PP-OCRv5 OCR がコンパイル済みで wheel に同梱され、Markdown と画像からの PDF 生成にも対応しました。RAGSpine はこれを通じて（[pdf] extra 経由で）ファミリー OCR に到達します。"
+    title="pdfspine 0.11.2"
+    description="PyMuPDF（fitz）の Apache-2.0・純 Rust 再実装（PyO3 バインディング付き）— PP-OCRv5 OCR がコンパイル済みで wheel に同梱され、Markdown と画像からの PDF 生成にも対応しました。RAGSpine はこれを通じて（[pdf] extra 経由で）ファミリー OCR に到達します。main 上で未リリース：0.11.3 で ToUnicode のない Identity-H / Identity-V フォントの CJK テキスト抽出を修正。モデルが読み順を返さない場合、ONNX レイアウトは再帰的 XY-cut で並べ替えます。pdf-typeset に破線と間隔付きの段落区切り線を追加。"
   ></Card>
   <Card
-    title="docspine 0.2.0"
-    description="Apache-2.0・純 Rust の DOCX で、第一級のテーブルモデル（gridSpan / vMerge / ネスト）を備えます。忠実な .docx → PDF エクスポート（ストリーミングページネーション、セクションごとのジオメトリ、テーブル忠実度）に対応しました。[doc] extra を通じて RAGSpine の .docx Extractor を支えます。"
+    title="docspine 0.5.1"
+    description="Apache-2.0・純 Rust の DOCX で、第一級のテーブルモデル（gridSpan / vMerge / ネスト）を備えます。忠実な .docx → PDF エクスポート（ストリーミングページネーション、セクションごとのジオメトリ、テーブル忠実度）に対応しました。[doc] extra を通じて RAGSpine の .docx Extractor を支えます。main 上で未リリース：依存を pdfspine 0.11.2 に揃え、段落の罫線と網掛けをエンジンネイティブに描画（ページをまたぐ場合は各ページに描画）、上付き・下付きの実際のベースラインシフトと w:spacing / w:position、zip 制限（ZipLimits）と 64 階層のネストガード、OCR の panic 分離。CI の Python マトリクスが実際に走るようになりました。"
   ></Card>
   <Card
-    title="pptspine 0.2.0"
-    description="Apache-2.0・純 Rust の PowerPoint / OOXML で、より充実したマージ処理を備えます。忠実な .pptx → PDF エクスポート（スライドごとに 1 ページ、プレースホルダー/テーマ継承）に対応しました。[ppt] extra を通じて RAGSpine のオプトイン .pptx Extractor を支えます。"
+    title="pptspine 0.5.1"
+    description="Apache-2.0・純 Rust の PowerPoint / OOXML で、より充実したマージ処理を備えます。忠実な .pptx → PDF エクスポート（スライドごとに 1 ページ、プレースホルダー/テーマ継承）に対応しました。[ppt] extra を通じて RAGSpine のオプトイン .pptx Extractor を支えます。main 上で未リリース：依存を pdfspine 0.11.2 に揃え、文字間隔（spc）・baseline・cap、コネクタの線端（headEnd / tailEnd）、custGeom は警告付きで近似描画、zip 制限、OCR の panic 分離、CI の wheels ジョブを修正。"
   ></Card>
 </Cards>

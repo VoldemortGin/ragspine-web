@@ -105,3 +105,20 @@ or skip paths; a picture with missing media bytes or no size is skipped with a
 
 Rendering is deterministic per font environment: the same document and the same
 installed fonts produce the same PDF bytes.
+
+## On main, unreleased
+
+These export changes are merged on `main` after 0.5.1 and are not yet on PyPI:
+
+- **Paragraph borders and shading** use pdf-typeset's native paragraph borders
+  instead of a one-cell table wrapper. Bordered or shaded paragraphs that split
+  across pages, including in-paragraph page breaks, are drawn on every page;
+  `dashed` and `dashSmallGap` render as dashes, and matching adjacent paragraphs
+  share one box. `w:between` is still not drawn and warns once.
+- **Superscript / subscript** render with a real baseline shift (glyphs at 0.65×,
+  raised or lowered) instead of only shrinking.
+- **`w:spacing` and `w:position`** (character spacing and manual baseline shift)
+  are parsed, cascaded and rendered. Over-condensed paragraphs fall back to zero
+  spacing with a `signed-spacing-fallback` warning.
+
+Documents that use none of these render byte-identical PDFs.

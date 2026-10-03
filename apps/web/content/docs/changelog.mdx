@@ -8,12 +8,48 @@ packaging, and dependencies. For the reasoning behind a change, follow the linke
 [ADR](/en/docs/decisions). For symbol-level detail, run `make docs` against the tagged source.
 
 <Callout type="info">
-  The documentation follows the current `main` tree, whose package metadata is `0.11.0`. That is not
-  a claim that PyPI has published 0.11.0. Check `ragspine version` and your lockfile for the
-  behavior of an installed distribution.
+  The latest release on PyPI is **rag-spine 0.17.2**. The `main` tree's package metadata is `0.17.3`,
+  which is not published yet. Entries for 0.12.0–0.17.2 are not yet transcribed on this page; see the
+  repository [CHANGELOG](https://github.com/VoldemortGin/ragspine/blob/main/CHANGELOG.md). Check
+  `ragspine version` and your lockfile for the behavior of an installed distribution.
 </Callout>
 
-## 0.11.0 (current source snapshot)
+## Unreleased on `main` (0.17.3)
+
+**One settings module, a one-command folder pipeline, and a planned distribution rename.** Merged on
+`main` as of 2026-10-02; not yet published to PyPI.
+
+### Changed
+
+- **Planned PyPI rename `rag-spine` → `ragspine`.** From 0.17.3 the distribution is to be published
+  as `ragspine`, and `rag-spine` stays as a transitional package that depends on the same `ragspine`
+  version. The import name (`import ragspine`) and the `ragspine` CLI do not change. Until 0.17.3 is
+  published, keep installing with `pip install rag-spine`.
+- **Narrative citation suffix merged per document** (`RAGSPINE_CITATION_MERGE=on|off`, default
+  `on`): the source suffix groups locators by document and collapses page numbers into ranges.
+  Display only; `answer_plain` and `sources` are unchanged, and `off` restores the old output.
+
+### Added
+
+- **Unified settings.** `ragspine.common.evidence.configs` holds the settings: pydantic-settings
+  reads the project `.env`, variables use the `APP_` prefix (`__` for nested fields), and
+  `APP_LLM_API_KEY` / `APP_LLM_BASE_URL` / `APP_LLM_MODEL` fall back to `OPENAI_API_KEY` /
+  `OPENAI_BASE_URL` / `OPENAI_MODEL` when unset. Real environment variables take precedence over
+  `.env`, so an exported `OPENAI_*` overrides an `APP_LLM_*` that is set only in `.env`.
+- **`enterprise-pdf-rag run-folder`.** Takes every PDF under a folder (recursively) through ingest,
+  qualification, indexing and publish, then optionally answers a question set in process. Runs are
+  budgeted and resumable. The folder, question set and report directory default to `NB_PDF_DIR`,
+  `NB_QUESTIONS_PATH` and `NB_REPORT_DIR`; an explicit argument wins.
+- **Example notebook** `notebooks/run_folder.ipynb` that drives the same pipeline (committed without
+  outputs or secrets).
+
+### Fixed
+
+- The number guard no longer splits a page list on a bare `page=` / `slide=` locator, and a page
+  list no longer swallows a following number that carries a unit (`%`, a decimal part, or a
+  magnitude word such as `亿` / `million`).
+
+## 0.11.0
 
 **Natural-language workflow scaffolding and a safe website preview contract.** This work is present
 on `main`; publication status is deliberately not inferred from source metadata.
@@ -268,28 +304,28 @@ optional active rate limiter. See [ADR 0012](/en/docs/decisions/adr-0012) for th
 
 ## The Spine family
 
-RAGSpine is one package in a small family that shares the thin `corespine` core. Current
-sibling releases:
+RAGSpine is one package in a small family that shares the thin `corespine` core. Latest PyPI
+releases (checked 2026-10-02), with merged but unreleased work on `main` noted:
 
 <Cards>
   <Card
-    title="corespine 0.1.0"
+    title="corespine 0.5.1"
     description="The thin shared core: the LLMProvider seam + RateLimitedProvider, six Protocol seams, a unified error type, and a mypy gate. Domain-neutral primitives only; empty runtime dependencies."
   ></Card>
   <Card
-    title="spineagent 0.0.3"
+    title="spineagent 0.3.1"
     description="The general multi-agent collaboration framework (agent / tool / orchestration + MCP / A2A seams), offline-first and built on corespine. Hardened with a dual type gate: mypy --strict + beartype."
   ></Card>
   <Card
-    title="pdfspine 0.3.0"
-    description="An Apache-2.0, pure-Rust reimplementation of PyMuPDF (fitz) with PyO3 bindings — PP-OCRv5 OCR ships compiled into the wheel, and it now generates PDFs from Markdown and images. RAGSpine reaches the family OCR through it (the [pdf] extra)."
+    title="pdfspine 0.11.2"
+    description="An Apache-2.0, pure-Rust reimplementation of PyMuPDF (fitz) with PyO3 bindings — PP-OCRv5 OCR ships compiled into the wheel, and it now generates PDFs from Markdown and images. RAGSpine reaches the family OCR through it (the [pdf] extra). On main, unreleased: 0.11.3 fixes CJK text extraction from Identity-H / Identity-V fonts without ToUnicode; ONNX layout orders blocks by a recursive XY-cut when the model gives no reading order; pdf-typeset adds dashed and spaced paragraph separators."
   ></Card>
   <Card
-    title="docspine 0.2.0"
-    description="Apache-2.0, pure-Rust DOCX with a first-class table model (gridSpan / vMerge / nested). Now exports faithful .docx → PDF (streaming pagination, per-section geometry, table fidelity). Backs RAGSpine's .docx Extractor via the [doc] extra."
+    title="docspine 0.5.1"
+    description="Apache-2.0, pure-Rust DOCX with a first-class table model (gridSpan / vMerge / nested). Now exports faithful .docx → PDF (streaming pagination, per-section geometry, table fidelity). Backs RAGSpine's .docx Extractor via the [doc] extra. On main, unreleased: dependencies aligned to pdfspine 0.11.2; paragraph borders and shading drawn natively on every page they span; superscript / subscript with a real baseline shift, plus w:spacing and w:position; zip limits (ZipLimits) and a 64-level nesting guard; OCR panic isolation; the CI Python matrix now runs."
   ></Card>
   <Card
-    title="pptspine 0.2.0"
-    description="Apache-2.0, pure-Rust PowerPoint / OOXML with richer merge handling. Now exports faithful .pptx → PDF (one page per slide, placeholder / theme inheritance). Backs RAGSpine's opt-in .pptx Extractor via the [ppt] extra."
+    title="pptspine 0.5.1"
+    description="Apache-2.0, pure-Rust PowerPoint / OOXML with richer merge handling. Now exports faithful .pptx → PDF (one page per slide, placeholder / theme inheritance). Backs RAGSpine's opt-in .pptx Extractor via the [ppt] extra. On main, unreleased: dependencies aligned to pdfspine 0.11.2; character spacing (spc), baseline and cap; connector line ends (headEnd / tailEnd); custGeom approximated with a warning; zip limits; OCR panic isolation; the CI wheels job fixed."
   ></Card>
 </Cards>
