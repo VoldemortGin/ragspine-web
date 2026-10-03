@@ -1,16 +1,16 @@
-# rag-spine-web
+# ragspine-web
 
 The documentation websites for the **Spine family** of framework-free backend engines.
 Each package gets its own [Fumadocs](https://fumadocs.dev) + Next.js (App Router) site,
 statically exported (`output: 'export'`) and deployed to its own **Cloudflare Pages**
 project:
 
-| App               | Package                      | Documents  | Pages project     | Domain                 |
-| ----------------- | ---------------------------- | ---------- | ----------------- | ---------------------- |
-| `apps/web`        | `@rag-spine/web`             | RAGSpine   | `rag-spine`       | `rag-spine.org` (apex) |
-| `apps/corespine`  | `@rag-spine/corespine-docs`  | corespine  | `corespine-docs`  | `core.rag-spine.org`   |
-| `apps/spineagent` | `@rag-spine/spineagent-docs` | spineagent | `spineagent-docs` | `agent.rag-spine.org`  |
-| `apps/pdfspine`   | `@rag-spine/pdfspine-docs`   | pdfspine   | `pdfspine-docs`   | `pdf.rag-spine.org`    |
+| App               | Package                     | Documents  | Pages project     | Domain                 |
+| ----------------- | --------------------------- | ---------- | ----------------- | ---------------------- |
+| `apps/web`        | `@ragspine/web`             | RAGSpine   | `rag-spine`       | `rag-spine.org` (apex) |
+| `apps/corespine`  | `@ragspine/corespine-docs`  | corespine  | `corespine-docs`  | `core.rag-spine.org`   |
+| `apps/spineagent` | `@ragspine/spineagent-docs` | spineagent | `spineagent-docs` | `agent.rag-spine.org`  |
+| `apps/pdfspine`   | `@ragspine/pdfspine-docs`   | pdfspine   | `pdfspine-docs`   | `pdf.rag-spine.org`    |
 
 This repo is a pnpm + Turborepo monorepo following the frontend project standard (strict
 TypeScript, type-aware ESLint, Prettier, a single zero-warning gate). The sites are pure
@@ -41,15 +41,15 @@ Each app's documentation content lives in `apps/<name>/content/docs/`.
 
 ```bash
 pnpm install
-pnpm --filter @rag-spine/web dev             # http://localhost:3000
-pnpm --filter @rag-spine/corespine-docs dev  # the corespine site, etc.
+pnpm --filter @ragspine/web dev             # http://localhost:3000
+pnpm --filter @ragspine/corespine-docs dev  # the corespine site, etc.
 ```
 
 ## Build (static export)
 
 ```bash
 pnpm -w run build                            # build all four sites
-pnpm --filter @rag-spine/corespine-docs build # or just one
+pnpm --filter @ragspine/corespine-docs build # or just one
 # output: apps/<name>/out/
 ```
 

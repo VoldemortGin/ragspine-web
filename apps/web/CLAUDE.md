@@ -1,4 +1,4 @@
-# CLAUDE.md — @rag-spine/web
+# CLAUDE.md — @ragspine/web
 
 The RAGSpine documentation site (Fumadocs + Next.js App Router). This is the **only**
 package in the monorepo and the **composition root**: the single place where a

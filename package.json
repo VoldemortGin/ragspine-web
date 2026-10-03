@@ -1,5 +1,5 @@
 {
-  "name": "rag-spine-web",
+  "name": "ragspine-web",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@10.30.2",

@@ -1,4 +1,4 @@
-# CLAUDE.md — rag-spine-web
+# CLAUDE.md — ragspine-web
 
 > 家族关系与依赖：先读 [`docs/spine-family.md`](docs/spine-family.md)（每仓副本相同，真源在家族根目录）。
 
