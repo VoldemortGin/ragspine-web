@@ -18,10 +18,10 @@ concurrency:
 #
 #   app             | package                      | Pages project   | custom domain
 #   ----------------+------------------------------+-----------------+----------------------
-#   apps/web        | @rag-spine/web               | rag-spine       | rag-spine.org (apex)
-#   apps/corespine  | @rag-spine/corespine-docs    | corespine-docs  | core.rag-spine.org
-#   apps/spineagent | @rag-spine/spineagent-docs   | spineagent-docs | agent.rag-spine.org
-#   apps/pdfspine   | @rag-spine/pdfspine-docs     | pdfspine-docs   | pdf.rag-spine.org
+#   apps/web        | @ragspine/web               | rag-spine       | rag-spine.org (apex)
+#   apps/corespine  | @ragspine/corespine-docs    | corespine-docs  | core.rag-spine.org
+#   apps/spineagent | @ragspine/spineagent-docs   | spineagent-docs | agent.rag-spine.org
+#   apps/pdfspine   | @ragspine/pdfspine-docs     | pdfspine-docs   | pdf.rag-spine.org
 #
 # First deploy to a new project auto-creates it (reusing the shared
 # CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID secrets); after that, bind the
